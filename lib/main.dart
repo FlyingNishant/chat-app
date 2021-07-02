@@ -1,7 +1,9 @@
 import 'package:chat_app/screens/auth_screen.dart';
+import 'package:chat_app/screens/chat_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import './screens/chat_screen.dart';
+// import './screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
@@ -21,7 +23,21 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.deepPurple,
         accentColorBrightness: Brightness.dark,
       ),
-      home: AuthScreen(),
+      home:StreamBuilder<User?>(stream: FirebaseAuth.instance.authStateChanges(), builder: (ctx, userSnapshot) {
+        // if(userSnapshot.connectionState == ConnectionState.waiting){
+        //   return Center(child: CircularProgressIndicator(),);
+        // }
+        // else{
+          if(userSnapshot.hasData){
+          return ChatScreen();
+
+          }
+          else{
+            return AuthScreen();
+          }
+        // }
+       
+      },)
     );
   }
 }
