@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:chat_app/widgets/auth_form.dart';
+import '../widgets/auth/auth_form.dart';
 // import 'package:flutter/services.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -36,7 +36,13 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
-        await FirebaseFirestore.instance.collection('users').doc(_authResult.user!.uid).set({'username': username, 'email':email,});
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_authResult.user!.uid)
+            .set({
+          'username': username,
+          'email': email,
+        });
       }
     } on FirebaseAuthException catch (err) {
       String message = 'An error ovvured, please check your credntials';

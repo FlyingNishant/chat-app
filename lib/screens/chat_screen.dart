@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../widgets/chat/messeges.dart';
+
 class ChatScreen extends StatelessWidget {
   const ChatScreen({Key? key}) : super(key: key);
 
@@ -11,9 +13,12 @@ class ChatScreen extends StatelessWidget {
       appBar: AppBar(
         actions: [
           DropdownButton(
-            icon: Icon(Icons.more_vert, color: Theme.of(context).iconTheme.color,),
-            onChanged: (itemIdentifier){
-              if(itemIdentifier == 'logout'){
+            icon: Icon(
+              Icons.more_vert,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            onChanged: (itemIdentifier) {
+              if (itemIdentifier == 'logout') {
                 FirebaseAuth.instance.signOut();
               }
             },
@@ -22,37 +27,29 @@ class ChatScreen extends StatelessWidget {
                 child: Container(
                   child: Row(
                     children: [
-                      Icon(Icons.logout, color: Theme.of(context).iconTheme.color,),
-                      SizedBox(width: 10,),
+                      Icon(
+                        Icons.logout,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Text('logout'),
                     ],
                   ),
                 ),
                 value: 'logout',
               ),
-
             ],
           ),
         ],
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('chats/G19jnGV8Sakfuml8ePDz/messages')
-            .snapshots(),
-        builder: (ctx, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-          if (streamSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          final docs = streamSnapshot.data!.docs;
-          return ListView.builder(
-            itemCount: docs.length,
-            itemBuilder: (ctx, index) {
-              print(docs[index]);
-              return Text(docs[index]['text']);
-            },
-          );
-        },
-      ),
+      body: Container(
+          child: Column(
+        children: [
+          Expanded(child: Messeges()),
+        ],
+      )),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           FirebaseFirestore.instance
