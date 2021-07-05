@@ -19,11 +19,11 @@ class ChatBubble extends StatelessWidget {
         Container(
           margin: EdgeInsets.symmetric(
             vertical: 3,
-            horizontal: 5,
+            horizontal: 8,
           ),
           padding: EdgeInsets.symmetric(
             vertical: 8,
-            horizontal: 5,
+            horizontal: 10,
           ),
           constraints: BoxConstraints(
             minWidth: 50,

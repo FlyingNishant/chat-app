@@ -1,6 +1,8 @@
-import 'dart:isolate';
+import 'dart:io';
 
+import 'package:chat_app/widgets/pickers/user_image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   final void Function(
@@ -10,7 +12,11 @@ class AuthForm extends StatefulWidget {
     bool isLogin,
   ) submitFn;
   final isLoading;
-  const AuthForm({Key? key, required this.submitFn, required this.isLoading,}) : super(key: key);
+  const AuthForm({
+    Key? key,
+    required this.submitFn,
+    required this.isLoading,
+  }) : super(key: key);
 
   @override
   _AuthFormState createState() => _AuthFormState();
@@ -18,7 +24,7 @@ class AuthForm extends StatefulWidget {
 
 class _AuthFormState extends State<AuthForm> {
   final _form = GlobalKey<FormState>();
-
+  File? _pickedImage;
   String _userName = '';
   String _userEmail = '';
   String _userPassword = '';
@@ -56,6 +62,7 @@ class _AuthFormState extends State<AuthForm> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                if (!_isLogin) UserImagePicker(),
                 TextFormField(
                   key: ValueKey('email'),
                   decoration: InputDecoration(labelText: 'Email'),
@@ -106,24 +113,25 @@ class _AuthFormState extends State<AuthForm> {
                 SizedBox(
                   height: 20,
                 ),
-                widget.isLoading ? CircularProgressIndicator():
-                ElevatedButton(
-                  onPressed: onSave,
-                  child: Text(_isLogin ? 'LOGIN' : 'SIGN UP'),
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 20,
+                widget.isLoading
+                    ? CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: onSave,
+                        child: Text(_isLogin ? 'LOGIN' : 'SIGN UP'),
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(
+                              vertical: 5,
+                              horizontal: 20,
+                            ),
+                          ),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                ),
                 TextButton(
                   onPressed: () {
                     setState(() {
