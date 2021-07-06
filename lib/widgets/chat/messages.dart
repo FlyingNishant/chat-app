@@ -27,6 +27,7 @@ class Messeges extends StatelessWidget {
                 return ChatBubble(
                   message: chatDocs[index]['text'],
                   userName: chatDocs[index]['username'],
+                  userImage: chatDocs[index]['user_image'],
                   isMe: chatDocs[index]['uid'] ==
                       FirebaseAuth.instance.currentUser!.uid,
                   key: ValueKey(chatDocs[index].id),

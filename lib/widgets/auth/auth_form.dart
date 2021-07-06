@@ -9,6 +9,7 @@ class AuthForm extends StatefulWidget {
     String email,
     String password,
     String username,
+    File pickedImage,
     bool isLogin,
   ) submitFn;
   final isLoading;
@@ -35,17 +36,31 @@ class _AuthFormState extends State<AuthForm> {
   //   'username': '',
   //   'password': '',
   // };
+  void pickImageFn(File pickImage) {
+    _pickedImage = pickImage;
+  }
 
   void onSave() {
     if (!_form.currentState!.validate()) {
       return;
     }
+
     FocusScope.of(context).unfocus();
+
+    if (_pickedImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('please Enter an image'),
+        ),
+      );
+      return;
+    }
     _form.currentState!.save();
     widget.submitFn(
       _userEmail.trim(),
       _userPassword.trim(),
       _userName.trim(),
+      _pickedImage!,
       _isLogin,
     );
   }
@@ -62,7 +77,7 @@ class _AuthFormState extends State<AuthForm> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (!_isLogin) UserImagePicker(),
+                if (!_isLogin) UserImagePicker(pickImageFn),
                 TextFormField(
                   key: ValueKey('email'),
                   decoration: InputDecoration(labelText: 'Email'),
